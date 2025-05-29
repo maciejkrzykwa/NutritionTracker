@@ -18,12 +18,20 @@ export function NutritionTotals({ currentDate }: NutritionTotalsProps) {
   });
 
   const totals = dailyFoods.reduce(
-    (acc, food) => ({
-      protein: acc.protein + parseFloat(food.protein),
-      fat: acc.fat + parseFloat(food.fat),
-      carbs: acc.carbs + parseFloat(food.carbs),
-      calories: acc.calories + (parseFloat(food.protein) * 4 + parseFloat(food.fat) * 9 + parseFloat(food.carbs) * 4),
-    }),
+    (acc, food) => {
+      const multiplier = parseFloat(food.multiplier || "1.0");
+      const protein = parseFloat(food.protein) * multiplier;
+      const fat = parseFloat(food.fat) * multiplier;
+      const carbs = parseFloat(food.carbs) * multiplier;
+      const calories = protein * 4 + fat * 9 + carbs * 4;
+      
+      return {
+        protein: acc.protein + protein,
+        fat: acc.fat + fat,
+        carbs: acc.carbs + carbs,
+        calories: acc.calories + calories,
+      };
+    },
     { protein: 0, fat: 0, carbs: 0, calories: 0 }
   );
 

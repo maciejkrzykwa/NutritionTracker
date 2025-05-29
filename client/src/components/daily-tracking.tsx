@@ -52,12 +52,25 @@ export function DailyTracking({ currentDate }: DailyTrackingProps) {
     },
   });
 
+  const updateMultiplierMutation = useMutation({
+    mutationFn: async ({ id, multiplier }: { id: number; multiplier: string }) => {
+      return apiRequest("PATCH", `/api/daily-foods/${id}/multiplier`, { multiplier });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/daily-foods", { date: currentDate }] });
+    },
+  });
+
   const handleAddProduct = (product: Product) => {
     addDailyFoodMutation.mutate(product);
   };
 
   const handleDeleteFood = (id: number) => {
     deleteDailyFoodMutation.mutate(id);
+  };
+
+  const handleUpdateMultiplier = (id: number, multiplier: string) => {
+    updateMultiplierMutation.mutate({ id, multiplier });
   };
 
   if (isLoading) {
@@ -87,6 +100,7 @@ export function DailyTracking({ currentDate }: DailyTrackingProps) {
                 key={food.id}
                 food={food}
                 onDelete={handleDeleteFood}
+                onUpdateMultiplier={handleUpdateMultiplier}
               />
             ))
           )}

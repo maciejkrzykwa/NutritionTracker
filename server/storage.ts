@@ -10,6 +10,7 @@ export interface IStorage {
   // Daily food methods
   getDailyFoods(date: string): Promise<DailyFood[]>;
   addDailyFood(food: InsertDailyFood): Promise<DailyFood>;
+  updateDailyFoodMultiplier(id: number, multiplier: string): Promise<DailyFood | undefined>;
   deleteDailyFood(id: number): Promise<void>;
 
   // User methods
@@ -75,9 +76,28 @@ export class MemStorage implements IStorage {
 
   async addDailyFood(insertDailyFood: InsertDailyFood): Promise<DailyFood> {
     const id = this.currentDailyFoodId++;
-    const dailyFood: DailyFood = { id, ...insertDailyFood };
+    const dailyFood: DailyFood = { 
+      id, 
+      multiplier: "1.0", 
+      productId: insertDailyFood.productId!,
+      date: insertDailyFood.date,
+      name: insertDailyFood.name,
+      protein: insertDailyFood.protein,
+      fat: insertDailyFood.fat,
+      carbs: insertDailyFood.carbs
+    };
     this.dailyFoods.set(id, dailyFood);
     return dailyFood;
+  }
+
+  async updateDailyFoodMultiplier(id: number, multiplier: string): Promise<DailyFood | undefined> {
+    const dailyFood = this.dailyFoods.get(id);
+    if (dailyFood) {
+      const updatedFood = { ...dailyFood, multiplier };
+      this.dailyFoods.set(id, updatedFood);
+      return updatedFood;
+    }
+    return undefined;
   }
 
   async deleteDailyFood(id: number): Promise<void> {

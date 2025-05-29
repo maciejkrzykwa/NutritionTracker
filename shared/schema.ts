@@ -18,6 +18,7 @@ export const dailyFoods = pgTable("daily_foods", {
   protein: decimal("protein", { precision: 5, scale: 2 }).notNull(),
   fat: decimal("fat", { precision: 5, scale: 2 }).notNull(),
   carbs: decimal("carbs", { precision: 5, scale: 2 }).notNull(),
+  multiplier: decimal("multiplier", { precision: 3, scale: 1 }).notNull().default("1.0"),
 });
 
 export const users = pgTable("users", {

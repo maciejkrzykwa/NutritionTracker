@@ -58,6 +58,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.patch("/api/daily-foods/:id/multiplier", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { multiplier } = req.body;
+      
+      if (!multiplier || isNaN(parseFloat(multiplier)) || parseFloat(multiplier) < 0 || parseFloat(multiplier) > 10) {
+        return res.status(400).json({ message: "Invalid multiplier value" });
+      }
+      
+      const updatedFood = await storage.updateDailyFoodMultiplier(id, multiplier);
+      if (!updatedFood) {
+        return res.status(404).json({ message: "Daily food not found" });
+      }
+      
+      res.json(updatedFood);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update multiplier" });
+    }
+  });
+
   app.delete("/api/daily-foods/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);

@@ -7,8 +7,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+const frontendUrl = process.env.FRONTEND_URL!;
 app.use(cors({
-  origin: "https://nutrifytrackerv2.netlify.app/", // adres Twojego frontendu
+  origin: frontendUrl, // adres Twojego frontendu
   credentials: true,                           // jeśli używasz ciasteczek
 }));
 

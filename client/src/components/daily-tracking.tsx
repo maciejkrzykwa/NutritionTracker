@@ -6,6 +6,7 @@ import { ProductSelectionModal } from "./product-selection-modal";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { DailyFood, Product } from "@shared/schema";
+import { API_BASE } from "@/lib/configServerEnv";
 
 interface DailyTrackingProps {
   currentDate: string;
@@ -17,7 +18,7 @@ export function DailyTracking({ currentDate }: DailyTrackingProps) {
   const { data: dailyFoods = [], isLoading } = useQuery<DailyFood[]>({
     queryKey: ["/api/daily-foods", { date: currentDate }],
     queryFn: async () => {
-      const response = await fetch(`/api/daily-foods?date=${currentDate}`, {
+      const response = await fetch(`${API_BASE}/api/daily-foods?date=${currentDate}`, {
         credentials: "include",
       });
       if (!response.ok) throw new Error("Failed to fetch daily foods");

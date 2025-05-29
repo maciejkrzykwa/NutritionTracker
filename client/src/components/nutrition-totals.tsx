@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import type { DailyFood } from "@shared/schema";
+import { API_BASE } from "@/lib/configServerEnv";
 
 interface NutritionTotalsProps {
   currentDate: string;
@@ -9,7 +10,7 @@ export function NutritionTotals({ currentDate }: NutritionTotalsProps) {
   const { data: dailyFoods = [] } = useQuery<DailyFood[]>({
     queryKey: ["/api/daily-foods", { date: currentDate }],
     queryFn: async () => {
-      const response = await fetch(`/api/daily-foods?date=${currentDate}`, {
+      const response = await fetch(`${API_BASE}/api/daily-foods?date=${currentDate}`, {
         credentials: "include",
       });
       if (!response.ok) throw new Error("Failed to fetch daily foods");

@@ -18,6 +18,10 @@ export function ProductManagement() {
     queryKey: ["/api/products"],
   });
 
+  const calculateCalories = (protein: string, fat: string, carbs: string) => {
+    return (parseFloat(protein) * 4 + parseFloat(fat) * 9 + parseFloat(carbs) * 4).toFixed(0);
+  };
+
   const form = useForm<InsertProduct>({
     resolver: zodResolver(insertProductSchema),
     defaultValues: {
@@ -168,7 +172,10 @@ export function ProductManagement() {
             <Card key={product.id} className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <h4 className="font-medium text-slate-900">{product.name}</h4>
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium text-slate-900">{product.name}</h4>
+                    <span className="text-sm font-semibold text-slate-900">{calculateCalories(product.protein, product.fat, product.carbs)} kcal</span>
+                  </div>
                   <div className="flex space-x-4 mt-1">
                     <span className="text-xs text-slate-600">
                       <span className="font-medium text-secondary">{product.protein}g</span> protein

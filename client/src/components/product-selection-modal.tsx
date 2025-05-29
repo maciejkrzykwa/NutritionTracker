@@ -19,6 +19,10 @@ export function ProductSelectionModal({
     queryKey: ["/api/products"],
   });
 
+  const calculateCalories = (protein: string, fat: string, carbs: string) => {
+    return (parseFloat(protein) * 4 + parseFloat(fat) * 9 + parseFloat(carbs) * 4).toFixed(0);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md mx-auto">
@@ -52,8 +56,11 @@ export function ProductSelectionModal({
                   className="w-full h-auto p-4 justify-between hover:bg-slate-50"
                   onClick={() => onSelectProduct(product)}
                 >
-                  <div className="text-left">
-                    <h4 className="font-medium text-slate-900">{product.name}</h4>
+                  <div className="text-left flex-1">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium text-slate-900">{product.name}</h4>
+                      <span className="text-sm font-semibold text-slate-900">{calculateCalories(product.protein, product.fat, product.carbs)} kcal</span>
+                    </div>
                     <div className="flex space-x-4 mt-1">
                       <span className="text-xs text-slate-600">
                         <span className="font-medium text-secondary">{product.protein}g</span> protein
